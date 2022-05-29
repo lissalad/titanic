@@ -79,13 +79,20 @@ const sumAllProperty = (data, property) => {
 
 const countAllProperty = (data, property) => { // IN PROGRESS
   let list = {};
+  let count = 0;
+  let unique = getUniqueValues(data, property);
+
+  unique.map((value) => {
+    count = filterByProperty(data, property, value).length;
+    list[value] = count;
+  })
 
   // get count for undefined
-  const undefined = getAllValuesForProperty(data, property).length - filterNullForProperty(data, property).length;
-  list["undefined"] = undefined;
+  // const undefined = getAllValuesForProperty(data, property).length - filterNullForProperty(data, property).length;
+  // list["undefined"] = undefined;
 
-  data = filterNullForProperty(data, property);
-  list = data.map()
+  // data = filterNullForProperty(data, property);
+  // list = data.map()
 
   return list;
 }
@@ -93,11 +100,23 @@ const countAllProperty = (data, property) => { // IN PROGRESS
 
 // 6 ------------------------------------------------------------
 // Make histogram. The goal is to return an array with values 
-// of a properties divided into buckets and counting the number
+// of properties divided into buckets and counting the number
 // of items in each bucket.
 
 const makeHistogram = (data, property, step) => {
-	return []
+  data = filterNullForProperty(data, property);
+  let values = getAllValuesForProperty(data, property);
+
+  values = values.reduce((histogram, value) => {
+    if (histogram[Math.floor(value / step)] == undefined) {
+      histogram[Math.floor(value / step)] = 1;
+    } else {
+      histogram[Math.floor(value / step)] += 1;
+    }
+    return histogram;
+  }, []);
+
+	return Array.from(values, (value) => value || 0 );
 }
 
 // 7 ------------------------------------------------------------
@@ -106,7 +125,13 @@ const makeHistogram = (data, property, step) => {
 // to divide each value by the maximum value in the array.
 
 const normalizeProperty = (data, property) => {
-	return []
+  data = filterNullForProperty(data, property);
+  const values = getAllValuesForProperty(data, property);
+  const max = Math.max(...values);
+
+	return values.map((value) => {
+    return value/max;
+  });
 }
 
 // 8 ------------------------------------------------------------
@@ -117,9 +142,9 @@ const normalizeProperty = (data, property) => {
 // would return ['male', 'female']
 
 const getUniqueValues = (data, property) => {
-  const all = filterNullForProperty(data, property);
+  // const all = filterNullForProperty(data, property);
   let list = []
-  all.map((passenger) => {
+  data.forEach((passenger) => {
     if(!list.includes(passenger.fields[property])) {
       list.push(passenger.fields[property]);
     }
@@ -149,4 +174,4 @@ module.exports = {
 // console.log(filterNullForProperty(json_data, "fare"));
 // console.log(sumAllProperty(json_data, "age"));
 // console.log(countAllProperty(json_data, "embarked"));
-console.log(getUniqueValues(json_data, "embarked"));
+// console.log(getUniqueValues(json_data, "embarked"));
