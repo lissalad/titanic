@@ -221,10 +221,10 @@ const getMedianFare = (data) => {
   });
   fares = fares.map(passenger => passenger.fields.fare);
   fares = fares.sort((a, b) => {return a-b});
-  console.log(fares);
+  // console.log(fares);
 
   const middle = Math.floor((fares.length/2));
-  console.log(middle);
+  // console.log(middle);
   
   if (fares.length % 2 === 0) {
     return (fares[middle] + fares[middle - 1]) / 2;
@@ -311,6 +311,6 @@ module.exports = {
 // console.log(getMinFare(json_data));
 // console.log(getMaxFare(json_data));
 // console.log(getMedianFare(json_data));
-console.log(getAverageAge(json_data));
+// console.log(getAverageAge(json_data));
 
 

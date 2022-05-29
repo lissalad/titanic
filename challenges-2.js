@@ -1,4 +1,5 @@
 // ================================================================
+const json_data = require("./titanic-passengers.json");
 
 // Titanic Dataset challenges! 
 
@@ -25,7 +26,7 @@
 // Or if property = 'age' -> [40, 26, 22, 28, 23, 45, 21, ...]
 
 const getAllValuesForProperty = (data, property) => {
-	return []
+	return data.map(passenger => passenger.fields[property]);
 }
 
 // 2 -------------------------------------------------------------
@@ -34,7 +35,10 @@ const getAllValuesForProperty = (data, property) => {
 // array of all the male passengers [{...}, {...}, {...}, ...]
 
 const filterByProperty = (data, property, value) => {
-	return []
+	let list = data.filter((passenger) => {
+    return passenger.fields[property] === value;
+  });
+  return list;
 }
 
 // 3 -------------------------------------------------------------
@@ -43,7 +47,11 @@ const filterByProperty = (data, property, value) => {
 // given property have been removed
 
 const filterNullForProperty = (data, property) => {
-	return []
+  let valid = data.filter((passenger) => {
+    return passenger.fields[property] !== undefined;
+  });
+	// return valid.map(passenger => passenger);
+  return valid;
 }
 
 // 4 -------------------------------------------------------------
@@ -52,7 +60,10 @@ const filterNullForProperty = (data, property) => {
 // Return the total of all values for a given property. This
 
 const sumAllProperty = (data, property) => {
-	return 0
+	valid = filterNullForProperty(data, property);
+  return valid.reduce((total, passenger) => {
+    return total + passenger.fields[property];
+  }, 0);
 }
 
 
@@ -66,8 +77,17 @@ const sumAllProperty = (data, property) => {
 // That is 644 passengers embarked at South Hampton. 168 embarked 
 // at Cherbourg, 77 emabrked at Queenstown, and 2 are undedfined
 
-const countAllProperty = (data, property) => {
-	return {}
+const countAllProperty = (data, property) => { // IN PROGRESS
+  let list = {};
+
+  // get count for undefined
+  const undefined = getAllValuesForProperty(data, property).length - filterNullForProperty(data, property).length;
+  list["undefined"] = undefined;
+
+  data = filterNullForProperty(data, property);
+  list = data.map()
+
+  return list;
 }
 
 
@@ -97,7 +117,17 @@ const normalizeProperty = (data, property) => {
 // would return ['male', 'female']
 
 const getUniqueValues = (data, property) => {
-	return []
+  const all = filterNullForProperty(data, property);
+  let list = []
+  all.map((passenger) => {
+    if(!list.includes(passenger.fields[property])) {
+      list.push(passenger.fields[property]);
+    }
+    // return;
+  })
+
+  return list;
+
 }
 
 // --------------------------------------------------------------
@@ -112,3 +142,11 @@ module.exports = {
 	normalizeProperty,
 	getUniqueValues
 }
+
+// LISSA'S TESTS
+// console.log(getAllValuesForProperty(json_data, "sex"))
+// console.log(filterByProperty(json_data, "age", 20));
+// console.log(filterNullForProperty(json_data, "fare"));
+// console.log(sumAllProperty(json_data, "age"));
+// console.log(countAllProperty(json_data, "embarked"));
+console.log(getUniqueValues(json_data, "embarked"));

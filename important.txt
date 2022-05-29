@@ -1,0 +1,18 @@
+const countAllProperty = (data, property) => { // IN PROGRESS
+  // data = filterNullForProperty(data, property);
+  data = getUniqueValues(data, property);
+  let props = data.reduce((acc,curr)=> (acc[curr]= filterByProperty(data, property, curr),acc),{});
+
+
+  // let list = {};
+
+
+  // // get count for undefined
+  // const undefined = getAllValuesForProperty(data, property).length - filterNullForProperty(data, property).length;
+  // list["undefined"] = undefined;
+
+  // list = data.map()
+
+
+  return props;
+}
